@@ -3,17 +3,19 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LayoutDashboard, BookOpen, BarChart2, Settings, ChevronLeft, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const navItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'courses', label: 'Courses', icon: BookOpen },
-  { id: 'progress', label: 'Progress', icon: BarChart2 },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, href: '/' },
+  { id: 'courses', label: 'Courses', icon: BookOpen, href: '/courses' },
+  { id: 'progress', label: 'Progress', icon: BarChart2, href: '/progress' },
+  { id: 'settings', label: 'Settings', icon: Settings, href: '/settings' },
 ]
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false)
-  const [activeId, setActiveId] = useState('dashboard')
+  const pathname = usePathname()
 
   return (
     <motion.nav
@@ -40,11 +42,11 @@ export default function Sidebar() {
       <ul className="flex flex-col gap-1 flex-1">
         {navItems.map((item) => {
           const Icon = item.icon
-          const isActive = activeId === item.id
+          const isActive = pathname === item.href
           return (
             <li key={item.id}>
-              <button
-                onClick={() => setActiveId(item.id)}
+              <Link
+                href={item.href}
                 className="relative w-full flex items-center gap-3 px-2 py-2.5 rounded-lg text-sm transition-colors"
               >
                 {isActive && (
@@ -67,7 +69,7 @@ export default function Sidebar() {
                     </motion.span>
                   )}
                 </AnimatePresence>
-              </button>
+              </Link>
             </li>
           )
         })}
